@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="icon" href="icon.png">
+    <link rel="stylesheet" href="fontawesome/fontawesome-free-6.5.1-web/css/all.min.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-image: url(Fundo.png);
+            transition: background 0.2s linear;
+        }
+        body.dark{
+            background-image: url(Fundo\ Escuro.png);
+        }
+        .calculadora{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 18px;
+            padding: 15px;
+            background-color: #eee0e5 ;
+            box-shadow: 0px 10px 20px #77669B;
+        }
+        .calculadora.dark{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 18px;
+            padding: 15px;
+            background-color: #292929 ;
+            box-shadow: 0px 10px 20px #101010;
+        }
+        .botao{
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            cursor: pointer;
+            background-color: white;
+            border: none;
+            color: #363636;
+            border-radius: 20px;
+            margin: 3px;
+            font-family: Arial, Helvetica, sans-serif;
+            box-shadow: 0px 5px 10px #c3c1c7;
+            margin-top: 10px;
+        }
+
+        .botao.dark{
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            cursor: pointer;
+            background-color: rgb(65, 65, 65);
+            border: none;
+            color: #ffffff;
+            border-radius: 20px;
+            margin: 3px;
+            font-family: Arial, Helvetica, sans-serif;
+            box-shadow: 0px 5px 10px #101010;
+            margin-top: 10px;
+        }
+
+        .botao:hover{
+           background-color: #ab9eff; 
+           transition: 0.2s;
+           opacity: 0.7;
+        }
+
+        #resultado{
+            background-color: white;
+            width: 222px;
+            height: 40px;
+            margin: 5px;
+            font-size: 25px;
+            color: #363636;
+            text-align: right;
+            border-radius: 10px;
+            padding: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            box-shadow: 0px 5px 10px #c3c1c7;
+        }
+        #resultado.dark{
+            background-color: rgb(65, 65, 65);
+            width: 222px;
+            height: 40px;
+            margin: 5px;
+            font-size: 25px;
+            color: #ffffff;
+            text-align: right;
+            border-radius: 10px;
+            padding: 5px;
+            font-family: Arial, Helvetica, sans-serif;
+            overflow: hidden;
+            box-shadow: 0px 5px 10px #101010;
+        }
+        #apaga{
+            font-size: 20px;
+        }
+        .icone{
+            font-size: 20px;
+            display: flex;
+            margin-left: 7px;
+            margin-bottom: 11px;
+            color: #836fff;
+            cursor: pointer;
+        }
+  
+    </style>
+</head>
+<body>    
+    <div class="fundo">
+        <div class="calculadora">
+            <div class="icone">
+               <i id="lua" class="fa-solid fa-moon"></i>
+            </div>
+            <p id="resultado"></p>
+            <table>
+                <tr>
+                    <td><button class="botao" onclick="clean()" style="background-color: #836fff; color: #fafafa;">C</button></td>
+                    <td><button class="botao"  onclick="back('<')"style="color: #836fff;"><i id="apaga" class="fa-solid fa-delete-left"></i></button></td>
+                    <td><button class="botao" onclick="insert('/')">÷</button></td>
+                    <td><button class="botao"  onclick="insert('*')">x</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('7')">7</button></td>
+                    <td><button class="botao" onclick="insert('8')">8</button></td>
+                    <td><button class="botao" onclick="insert('9')">9</button></td>
+                    <td><button class="botao"  onclick="insert('-')">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('4')">4</button></td>
+                    <td><button class="botao" onclick="insert('5')">5</button></td>
+                    <td><button class="botao" onclick="insert('6')">6</button></td>
+                    <td><button class="botao" onclick="insert('+')">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('1')">1</button></td>
+                    <td><button class="botao" onclick="insert('2')">2</button></td>
+                    <td><button class="botao" onclick="insert('3')">3</button></td>
+                    <td rowspan="2"><button class="botao" onclick="calcular()" style="height: 112px; background-color: #836fff; color: #fafafa;">=</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button class="botao" onclick="insert('0')" style="width: 106px;">0</button></td>
+                    <td><button class="botao" onclick="insert('.')" >. </button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const mode = document.getElementById('lua');
+        mode.addEventListener('click',() => {
+            const fundo = document.querySelector('body');
+            const cal = document.querySelector('.calculadora');
+            const buttons = document.querySelectorAll('.botao');
+            const result = document.getElementById('resultado');
+            if(mode.classList.contains('fa-moon')){
+               mode.classList.remove('fa-moon');
+               mode.classList.add('fa-sun');
+
+               fundo.classList.add('dark');
+               cal.classList.add('dark');
+               buttons.forEach(button => button.classList.add('dark'));
+               result.classList.add('dark');
+               return;
+            }
+            mode.classList.add('fa-moon');
+            mode.classList.remove('fa-sun');
+            fundo.classList.remove('dark');
+            cal.classList.remove('dark');
+            buttons.forEach(button => button.classList.remove('dark'));
+            result.classList.remove('dark');
+        });
+        function insert (num)
+        {
+            var numero = document.getElementById('resultado').innerHTML;
+            document.getElementById('resultado').innerHTML = numero + num;
+        };
+
+        function clean(){
+            document.getElementById('resultado').innerHTML = "";
+        }
+
+        function back(){
+            var resultado = document.getElementById('resultado').innerHTML;
+            document.getElementById('resultado').innerHTML = resultado.substring(0, resultado.length  -1);
+        }
+
+        function calcular(){
+            var resultado = document.getElementById('resultado').innerHTML;
+            if(resultado)
+            {
+                document.getElementById('resultado').innerHTML = eval(resultado);
+            }
+            else
+            {
+                document.getElementById('resultado').innerHTML = "Inválido"
+            }
+        }
+
+    </script>
+          
+</body>
+</html>
